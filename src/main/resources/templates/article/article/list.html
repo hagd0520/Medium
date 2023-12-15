@@ -1,0 +1,34 @@
+<html layout:decorate="~{global/layout}">
+
+<head>
+    <title class="mb-3">게시글 목록</title>
+</head>
+
+<div layout:fragment="content" class="container mx-auto my-3">
+
+    <div class="font-bold text-2xl">게시글 목록</div>
+
+        <th:block th:replace="global/articleTable :: articleTable(${paging})"></th:block>
+
+    <form onsubmit="submitSearchForm(this); return false;">
+        <div style="display:flex;" class="mt-3">
+            <label class="form-control w-full max-w-xs mr-2">
+                <input class="input input-bordered w-full max-w-xs" type="search" name="kwUsername"
+                       placeholder="회원 이름으로 검색" th:value="${kwUsername}"/>
+            </label>
+            <input class="btn btn-accent" type="submit" value="검색">
+        </div>
+    </form>
+
+        <th:block th:replace="global/pagination :: pagination(${paging}, ${kwUsername})"></th:block>
+
+</div>
+
+<script>
+    function submitSearchForm(form) {
+
+        form.submit();
+    }
+</script>
+
+</html>
