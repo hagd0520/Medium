@@ -1,0 +1,66 @@
+<html layout:decorate="~{global/layout}">
+
+<head>
+    <title>글수정</title>
+</head>
+
+<body>
+
+<div layout:fragment="content">
+    <div class="my-3 border-bottom">
+        <h4 class="font-bold text-3xl">글수정</h4>
+    </div>
+
+    <form th:action class="flex flex-col gap-4" method="POST" onsubmit="submitWriteForm(this); return false;">
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">제목</span>
+            </label>
+            <input type="text" name="title" th:value="${article.title}" maxlength="200" placeholder="제목을 입력해주세요." class="input input-bordered">
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">내용</span>
+            </label>
+            <textarea name="body" rows="5" th:text="${article.body}" maxlength="10000" placeholder="내용을 입력해주세요."
+                      class="textarea textarea-bordered"></textarea>
+        </div>
+
+        <button class="btn btn-accent btn-block" type="submit">
+            작성
+        </button>
+        <div class="form-control">
+            <label class="cursor-pointer label">
+                <span class="label-text">공개 / 비공개</span>
+                <input type="checkbox" name="published" checked="checked" class="checkbox checkbox-success" />
+            </label>
+        </div>
+    </form>
+
+    <script>
+        function submitWriteForm(form) {
+            form.title.value = form.title.value.trim();
+
+            if (form.title.value.length == 0) {
+                toastWarning('제목을 입력해주세요.');
+                form.title.focus();
+
+                return;
+            }
+
+            form.body.value = form.body.value.trim();
+
+            if (form.body.value.length == 0) {
+                toastWarning('내용을 입력해주세요.');
+                form.body.focus();
+
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+</div>
+</body>
+</html>

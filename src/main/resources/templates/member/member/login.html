@@ -1,0 +1,69 @@
+<html layout:decorate="~{global/layout}">
+
+<head>
+    <title>로그인</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="my-3 border-bottom">
+        <h4 class="font-bold">로그인</h4>
+    </div>
+    <form th:action class="flex flex-col gap-4" method="POST" onsubmit="submitLoginForm(this); return false;">
+        <div th:if="${param.error}">
+            <div role="alert" class="alert alert-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none"
+                     viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+                <span>아이디 또는 비밀번호를 확인해 주세요.</span>
+            </div>
+        </div>
+
+        <div class="form-control">
+            <label class="lable">
+                <span class="label-text">아이디</span>
+            </label>
+            <input type="text" name="username" placeholder="아이디를 입력해주세요." class="input input-bordered">
+        </div>
+
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text">비밀번호</span>
+            </label>
+            <input type="password" name="password" placeholder="비밀번호를 입력해주세요." class="input input-bordered">
+        </div>
+
+        <button class="btn btn-accent btn-block" type="submit">
+            로그인
+        </button>
+    </form>
+
+    <script>
+        function submitLoginForm(form) {
+            form.username.value = form.username.value.trim();
+
+            if (form.username.value.length == 0) {
+                toastWarning('아이디를 입력해주세요.');
+                form.username.focus();
+
+                return;
+            }
+
+            form.password.value = form.password.value.trim();
+
+            if (form.password.value.length == 0) {
+                toastWarning('비밀번호를 입력해주세요.')
+                form.password.focus();
+
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+</div>
+</body>
+
+</html>

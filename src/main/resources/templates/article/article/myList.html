@@ -1,0 +1,23 @@
+<html layout:decorate="~{global/layout}">
+
+<head>
+    <title>나의 글 목록</title>
+</head>
+
+<div layout:fragment="content" class="container mx-auto my-3">
+
+    <div class="font-bold text-2xl">나의 글 목록</div>
+
+    <th:block th:with="paging = ${paging}">
+        <th:block th:replace="global/articleTable :: articleTable(${paging})"></th:block>
+    </th:block>
+
+    <th:block th:with="paging = ${paging}">
+        <th:block th:replace="global/pagination2 :: pagination(${paging})"></th:block>
+    </th:block>
+
+    <div style="display:flex; "></div>
+
+</div>
+
+</html>
