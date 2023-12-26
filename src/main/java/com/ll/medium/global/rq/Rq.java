@@ -37,6 +37,10 @@ public class Rq {
         }
     }
 
+    public String redirect(String path) {
+        return "redirect:" + path;
+    }
+
     public String redirect(String path, RsData<?> rsData) {
         return redirect(path, rsData.getMsg());
     }
@@ -53,7 +57,7 @@ public class Rq {
         msg = URLEncoder.encode(msg, UTF_8);
         msg += ";ttl=" + (new Date().getTime() + 1000 * 5);
 
-        return "redirect:" + path + "?msg=" + msg;
+        return redirect(path) + "?msg=" + msg;
     }
 
     public String historyBack(String msg) {

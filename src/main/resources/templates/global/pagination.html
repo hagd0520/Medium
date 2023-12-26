@@ -1,9 +1,9 @@
-<th:block th:fragment="pagination(paging, kwUsername)">
+<th:block th:fragment="pagination(paging)">
     <div class="join" th:if="${!paging.isEmpty()}"
          style="display:flex;
          justify-content: center; margin: 20px;">
         <a class="join-item btn" th:classappend="${!paging.hasPrevious} ? 'btn-disabled'"
-           th:href="@{|?kwUsername=${kwUsername}&page=${paging.number - 1}|}">
+           th:href="@{|?page=${paging.number - 1}|}">
             <span>이전</span>
         </a>
         <a th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}"
@@ -11,10 +11,10 @@
            th:classappend="${page == paging.number} ? 'btn-active'"
            class="join-item btn"
            th:text="${page + 1}"
-           th:href="@{|?kwUsername=${kwUsername}&page=${page}|}">
+           th:href="@{|?page=${page}|}">
         </a>
         <a class="join-item btn" th:classappend="${!paging.hasNext()} ? 'btn-disabled'"
-           th:href="@{|?kwUsername=${kwUsername}&page=${paging.number + 1}|}">
+           th:href="@{|?page=${paging.number + 1}|}">
             <span>다음</span>
         </a>
     </div>

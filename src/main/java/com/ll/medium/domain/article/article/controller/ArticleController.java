@@ -25,12 +25,11 @@ public class ArticleController {
     @GetMapping("/list")
     public String showList(Model model,
                            @RequestParam(value = "kwUsername", defaultValue = "") String kwUsername,
-                           @RequestParam(value = "page", defaultValue = "0") int page) {
+                           @RequestParam(value = "page", defaultValue = "0") int page
+    ) {
         Page<Article> paging = null;
-        if (kwUsername.equals(""))
-            paging = articleService.getList(page);
-        if (!kwUsername.equals(""))
-            paging = articleService.searchListByUsername(kwUsername, page);
+        if (kwUsername.equals("")) paging = articleService.getList(page);
+        if (!kwUsername.equals("")) paging = articleService.searchListByUsername(kwUsername, page);
         model.addAttribute("paging", paging);
         model.addAttribute("kwUsername", kwUsername);
         return "article/article/list";
@@ -39,7 +38,8 @@ public class ArticleController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myList")
     public String showMyList(Model model,
-                             @RequestParam(value = "page", defaultValue = "0") int page) {
+                             @RequestParam(value = "page", defaultValue = "0") int page
+    ) {
         Page<Article> paging = articleService.getMyList(page);
         model.addAttribute("paging", paging);
         return "article/article/myList";

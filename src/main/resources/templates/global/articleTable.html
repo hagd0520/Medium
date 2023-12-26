@@ -1,4 +1,4 @@
-<th:block th:fragment="articleTable(paging)">
+<th:block th:fragment="articleTable(articles)">
     <div class="card-side bg-base-100 shadow-xl">
         <div class="card-body">
             <table class="table">
@@ -11,8 +11,8 @@
                     </tr>
                 </thread>
                 <tbody>
-                <tr class="text-center" th:each="article, loop : ${paging}">
-                    <td th:text="${paging.totalElements - (paging.number * paging.size) - loop.index}"></td>
+                <tr class="text-center" th:each="article, loop : ${articles}">
+                    <td th:text="${article.id}"></td>
                     <td class="text-start">
                         <a th:href="@{|/article/detail/${article.id}|}" th:text="${article.title}"></a>
                     </td>

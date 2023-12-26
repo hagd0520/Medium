@@ -34,8 +34,13 @@ public class ArticleService {
         return articleRepository.findByIsPublishedTrue(pageable);
     }
 
-    public Page<Article> searchListByUsername(String username,
-                                           @RequestParam int page
+    public List<Article> getLast30Article() {
+        return articleRepository.findTop30ByOrderByCreateDateDesc();
+    }
+
+    public Page<Article> searchListByUsername(
+            String username,
+            @RequestParam int page
     ) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
