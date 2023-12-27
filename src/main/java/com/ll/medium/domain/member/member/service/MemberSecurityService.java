@@ -2,13 +2,19 @@ package com.ll.medium.domain.member.member.service;
 
 import com.ll.medium.domain.member.member.entity.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
+import static com.ll.medium.domain.member.member.entity.MemberRole.*;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +29,11 @@ public class MemberSecurityService implements UserDetailsService {
         }
 
         Member member = memberOp.get();
+        List<GrantedAuthority> authorites = new ArrayList<>();
+
+        if ("admin".equals(username)) authorites.add(new SimpleGrantedAuthority(ADMIN.getValue()));
+        if (member.isPaid()) authorites.add(new SimpleGrantedAuthority(PAID.getValue()));
+        else authorites.add(new SimpleGrantedAuthority(USER.getValue()));
 
         return new User(member.getUsername(), member.getPassword(), member.getAuthorities());
     }

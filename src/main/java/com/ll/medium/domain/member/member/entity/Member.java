@@ -26,6 +26,10 @@ public class Member extends BaseEntity {
         return username.equals("admin");
     }
 
+    public boolean isPaid() {
+        return isPaid;
+    }
+
     public List<SimpleGrantedAuthority> getAuthorities() {
         if (isAdmin()) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_MEMBER"));
