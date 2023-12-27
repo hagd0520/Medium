@@ -20,6 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 public class Member extends BaseEntity {
     private String username;
     private String password;
+    private boolean isPaid;
 
     public boolean isAdmin() {
         return username.equals("admin");
