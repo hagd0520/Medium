@@ -23,4 +23,9 @@ public class Article extends BaseEntity {
     private String title;
     private String body;
     private boolean isPublished;
+    private boolean isPaid;
+
+    public boolean isPaid() {
+        return isPaid;
+    }
 }
