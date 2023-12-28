@@ -11,10 +11,20 @@
                     </tr>
                 </thread>
                 <tbody>
-                <tr class="text-center" th:each="article, loop : ${articles}">
+                <tr class="text-center" th:each="article : ${articles}">
                     <td th:text="${article.id}"></td>
                     <td class="text-start">
-                        <a th:href="@{|/article/${article.id}/detail|}" th:text="${article.title}"></a>
+                        <a
+                                th:if="${article.Paid}"
+                                style="color: cornflowerblue;"
+                                th:href="@{|/article/${article.id}/detail|}"
+                                th:text="${article.title}"
+                        ></a>
+                        <a
+                                th:if="!${article.Paid}"
+                                th:href="@{|/article/${article.id}/detail|}"
+                                th:text="${article.title}"
+                        ></a>
                     </td>
                     <td><span th:if="${article.author !=null}" th:text="${article.author.username}"></span></td>
                     <td th:text="${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}"></td>
