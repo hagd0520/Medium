@@ -2,6 +2,7 @@ package com.ll.medium.domain.member.member.entity;
 
 import com.ll.medium.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Transient;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,7 @@ public class Member extends BaseEntity {
         return isPaid;
     }
 
+    @Transient
     public List<SimpleGrantedAuthority> getAuthorities() {
         if (isAdmin()) {
             return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_MEMBER"));

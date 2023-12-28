@@ -66,7 +66,7 @@ public class ArticleController {
         return rq.redirectOrBack("/", writeRs);
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}/detail")
     public String showDetail(Model model, @PathVariable long id) {
         Article article = articleService.findById(id).get();
 
@@ -75,7 +75,7 @@ public class ArticleController {
         return "article/article/detail";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/{id}/delete")
     public String delete(@PathVariable long id) {
         Article article = articleService.findById(id).get();
 
@@ -87,7 +87,7 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/modify/{id}")
+    @GetMapping("/{id}/modify")
     public String showModify(Model model, @PathVariable long id) {
         Article article = articleService.findById(id).get();
 
@@ -99,7 +99,7 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/modify/{id}")
+    @PostMapping("{id}/modify")
     public String modify(@PathVariable long id, @Valid ArticleModifyForm modifyForm) {
         Article article = articleService.findById(id).get();
 
