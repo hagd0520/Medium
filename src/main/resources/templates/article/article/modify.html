@@ -12,6 +12,7 @@
     </div>
 
     <form th:action class="flex flex-col gap-4" method="POST" onsubmit="submitWriteForm(this); return false;">
+        <input type="hidden" name="_method" value="PUT">
         <div class="form-control">
             <label class="label">
                 <span class="label-text">제목</span>

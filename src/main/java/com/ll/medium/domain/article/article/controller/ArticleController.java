@@ -99,7 +99,7 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("{id}/modify")
+    @PutMapping("{id}/modify")
     public String modify(@PathVariable long id, @Valid ArticleModifyForm modifyForm) {
         Article article = articleService.findById(id).get();
 
@@ -107,6 +107,6 @@ public class ArticleController {
 
         articleService.modify(article, modifyForm.getTitle(), modifyForm.getBody(), modifyForm.isPublished());
 
-        return rq.redirect("/article/detail/%d".formatted(id), "게시물이 수정되었습니다.");
+        return rq.redirect("/article/%d/detail".formatted(id), "게시물이 수정되었습니다.");
     }
 }
