@@ -82,6 +82,7 @@ public class ArticleService {
                 articleRepository.save(article));
     }
 
+    @Transactional
     public RsData<Article> write(
             String title,
             String body,

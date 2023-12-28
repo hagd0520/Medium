@@ -75,7 +75,7 @@ public class ArticleController {
         return "article/article/detail";
     }
 
-    @GetMapping("/{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable long id) {
         Article article = articleService.findById(id).get();
 

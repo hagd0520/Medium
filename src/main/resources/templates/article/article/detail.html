@@ -16,14 +16,19 @@
             <p class="font-bold mb-4" th:text="${article.body}"></p>
             <div>
                 <div class="mb-2" style="display:flex; justify-content: flex-end; align-items: flex-end;">
-                    <a th:if="${@articleService.canModify(@rq.member, article)}"
-                       class="btn btn-neutral mr-2" th:href="|/article/${article.id}/modify|"
-                            th:text="수정">
+                    <a
+                            th:if="${@articleService.canModify(@rq.member, article)}"
+                            class="btn btn-neutral mr-2" th:href="|/article/${article.id}/modify|"
+                            th:text="수정"
+                    >
                     </a>
-                    <a th:if="${@articleService.canDelete(@rq.member, article)}"
+                    <a
+                            method="DELETE"
+                            th:if="${@articleService.canDelete(@rq.member, article)}"
                             class="btn btn-neutral" th:href="|/article/${article.id}/delete|"
                             onclick="return confirm('정말로 삭제하시겠습니까?');"
-                            th:text="삭제"></a>
+                            th:text="삭제"
+                    ></a>
                 </div>
                 <div style="display:flex; justify-content: flex-end; align-items:flex-end;">
                     <div class="badge badge-neutral mr-3">
