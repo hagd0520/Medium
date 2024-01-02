@@ -55,7 +55,6 @@ public class ArticleController {
     @PostMapping("/write")
     public String write(@Valid ArticleWriteForm writeForm, BindingResult bindingResult) {
 
-
         RsData<Article> writeRs = articleService.write(
                 writeForm.getTitle(),
                 writeForm.getBody(),
@@ -100,13 +99,19 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("{id}/modify")
-    public String modify(@PathVariable long id, @Valid ArticleModifyForm modifyForm) {
+    public String modify(@PathVariable long id, @Valid ArticleModifyForm modifyForm, BindingResult bindingResult) { // TODO BindingResult 추가하기
         Article article = articleService.findById(id).get();
 
         if (!articleService.canModify(rq.getMember(), article)) throw new RuntimeException("수정 권한이 없습니다.");
 
-        articleService.modify(article, modifyForm.getTitle(), modifyForm.getBody(), modifyForm.isPublished());
+        RsData<Article> modifyRs = articleService.modify(
+                article,
+                modifyForm.getTitle(),
+                modifyForm.getBody(),
+                modifyForm.isPublished(),
+                bindingResult
+        );
 
-        return rq.redirect("/article/%d/detail".formatted(id), "게시물이 수정되었습니다.");
+        return rq.redirectOrBack("/article/%d/detail".formatted(id), modifyRs);
     }
 }

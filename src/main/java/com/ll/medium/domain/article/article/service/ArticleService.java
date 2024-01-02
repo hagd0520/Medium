@@ -79,7 +79,7 @@ public class ArticleService {
 
         return RsData.of("200",
                 "글이 작성되었습니다.",
-                articleRepository.save(article));
+                article);
     }
 
     @Transactional
@@ -132,6 +132,26 @@ public class ArticleService {
         article.setTitle(title);
         article.setBody(body);
         article.setPublished(isPublished);
+    }
+
+    @Transactional
+    public RsData<Article> modify(Article article, String title, String body, boolean isPublished, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return RsData.of(
+                    "400",
+                    bindingResult.getFieldError().getDefaultMessage(),
+                    null
+            );
+        }
+        article.setTitle(title);
+        article.setBody(body);
+        article.setPublished(isPublished);
+
+        return RsData.of(
+                "200",
+                "글이 수정되었습니다.",
+                article
+        );
     }
 
     public Optional<Article> findByUsername(String username) {

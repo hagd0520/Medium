@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.stream.IntStream;
 
 @Configuration
-public class NotProd {
+public class NotProd { // TODO paid 관련 메소드 추가하기, NotProd 에 테스트 데이터 생성 로직 추가하기
     @Bean
     public ApplicationRunner initNotProd(
             SystemService systemService,
