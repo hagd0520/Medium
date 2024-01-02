@@ -13,7 +13,16 @@
         <div class="card-body">
             <h2 class="font-bold mb-2 text-3xl" style="white-space: pre-line;" th:text="${article.title}"></h2>
             <hr class="mb-4">
-            <p class="font-bold mb-4" th:text="${article.body}"></p>
+            <p
+                    th:if="${@articleService.canReadArticleIsPaid(@rq.member, article)}"
+                    class="font-bold mb-4"
+                    th:text="${article.body}"
+            ></p>
+            <p
+                    th:if="${!@articleService.canReadArticleIsPaid(@rq.member, article)}"
+                    class="font-bold mb-4"
+                    style="color: cornflowerblue"
+            >이 글은 유료 멤버십 전용입니다.</p>
             <div>
                 <div class="mb-2" style="display:flex; justify-content: flex-end; align-items: flex-end;">
                     <a

@@ -1,10 +1,10 @@
-package com.ll.medium.domain.member.member.service;
+package com.ll.medium.global.security;
 
 import com.ll.medium.domain.member.member.entity.Member;
+import com.ll.medium.domain.member.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +18,7 @@ import static com.ll.medium.domain.member.member.entity.MemberRole.*;
 
 @Service
 @RequiredArgsConstructor
-public class MemberSecurityService implements UserDetailsService {
+public class CustomUserDetailsService implements UserDetailsService {
     private final MemberService memberService;
 
     @Override
@@ -35,6 +35,11 @@ public class MemberSecurityService implements UserDetailsService {
         if (member.isPaid()) authorites.add(new SimpleGrantedAuthority(PAID.getValue()));
         else authorites.add(new SimpleGrantedAuthority(USER.getValue()));
 
-        return new User(member.getUsername(), member.getPassword(), member.getAuthorities());
+        return new SecurityUser(
+                member.getId(),
+                member.getUsername(),
+                member.getPassword(),
+                member.getAuthorities()
+        );
     }
 }

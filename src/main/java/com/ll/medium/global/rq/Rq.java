@@ -3,6 +3,7 @@ package com.ll.medium.global.rq;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.global.rsData.RsData;
+import com.ll.medium.global.security.SecurityUser;
 import com.ll.medium.standard.util.Ut;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -26,15 +26,15 @@ public class Rq {
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
     private final MemberService memberService;
-    private User user;
+    private SecurityUser securityUser;
     private Member member;
 
     @PostConstruct
     public void init() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication.getPrincipal() instanceof User) {
-            this.user = (User) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof SecurityUser) {
+            this.securityUser = (SecurityUser) authentication.getPrincipal();
         }
     }
 
@@ -78,11 +78,11 @@ public class Rq {
     }
 
     public boolean isLogined() {
-        return user != null;
+        return securityUser != null;
     }
 
     public String getMemberUsername() {
-        return user.getUsername();
+        return securityUser.getUsername();
     }
 
     public Member getMember() {

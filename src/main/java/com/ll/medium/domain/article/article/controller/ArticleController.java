@@ -23,9 +23,10 @@ public class ArticleController {
     private final Rq rq;
 
     @GetMapping("/list")
-    public String showList(Model model,
-                           @RequestParam(value = "kwUsername", defaultValue = "") String kwUsername,
-                           @RequestParam(value = "page", defaultValue = "0") int page
+    public String showList(
+            Model model,
+            @RequestParam(value = "kwUsername", defaultValue = "") String kwUsername,
+            @RequestParam(value = "page", defaultValue = "0") int page
     ) {
         Page<Article> paging = null;
         if (kwUsername.equals("")) paging = articleService.getList(page);
@@ -37,8 +38,9 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myList")
-    public String showMyList(Model model,
-                             @RequestParam(value = "page", defaultValue = "0") int page
+    public String showMyList(
+            Model model,
+            @RequestParam(value = "page", defaultValue = "0") int page
     ) {
         Page<Article> paging = articleService.getMyList(page);
         model.addAttribute("paging", paging);
@@ -53,8 +55,10 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
-    public String write(@Valid ArticleWriteForm writeForm, BindingResult bindingResult) {
-
+    public String write(
+            @Valid ArticleWriteForm writeForm,
+            BindingResult bindingResult
+    ) {
         RsData<Article> writeRs = articleService.write(
                 writeForm.getTitle(),
                 writeForm.getBody(),
@@ -67,7 +71,10 @@ public class ArticleController {
     }
 
     @GetMapping("/{id}/detail")
-    public String showDetail(Model model, @PathVariable long id) {
+    public String showDetail(
+            Model model,
+            @PathVariable long id
+    ) {
         Article article = articleService.findById(id).get();
 
         model.addAttribute("article", article);
@@ -76,7 +83,9 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}/delete")
-    public String delete(@PathVariable long id) {
+    public String delete(
+            @PathVariable long id
+    ) {
         Article article = articleService.findById(id).get();
 
         if (!articleService.canDelete(rq.getMember(), article)) throw new RuntimeException("삭제 권한이 없습니다.");
@@ -88,7 +97,10 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/modify")
-    public String showModify(Model model, @PathVariable long id) {
+    public String showModify(
+            Model model,
+            @PathVariable long id
+    ) {
         Article article = articleService.findById(id).get();
 
         if (!articleService.canModify(rq.getMember(), article)) throw new RuntimeException("수정 권한이 없습니다.");
@@ -100,7 +112,11 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @PutMapping("{id}/modify")
-    public String modify(@PathVariable long id, @Valid ArticleModifyForm modifyForm, BindingResult bindingResult) { // TODO BindingResult 추가하기
+    public String modify(
+            @PathVariable long id,
+            @Valid ArticleModifyForm modifyForm,
+            BindingResult bindingResult
+    ) {
         Article article = articleService.findById(id).get();
 
         if (!articleService.canModify(rq.getMember(), article)) throw new RuntimeException("수정 권한이 없습니다.");
