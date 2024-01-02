@@ -21,7 +21,7 @@
                                 th:text="${article.title}"
                         ></a>
                         <a
-                                th:if="!${article.Paid}"
+                                th:if="${!article.Paid}"
                                 th:href="@{|/article/${article.id}/detail|}"
                                 th:text="${article.title}"
                         ></a>

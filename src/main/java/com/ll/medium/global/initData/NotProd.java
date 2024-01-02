@@ -25,18 +25,27 @@ public class NotProd { // TODO paid 관련 메소드 추가하기, NotProd 에 �
             Member memberUser1 = memberService.join("user1", "1234", "1234").getData();
             Member memberUser2 = memberService.join("user2", "1234", "1234").getData();
 
-            articleService.write("제목1", "내용1", memberAdmin, true);
-            articleService.write("제목2", "내용2", memberUser1, true);
-            articleService.write("제목3", "내용3", memberUser1, true);
-            articleService.write("제목4", "내용4", memberUser2, true);
-            articleService.write("제목5", "내용5", memberUser2, true);
+            articleService.write("제목1", "내용1", memberAdmin, true, false);
+            articleService.write("제목2", "내용2", memberUser1, true, false);
+            articleService.write("제목3", "내용3", memberUser1, true, false);
+            articleService.write("제목4", "내용4", memberUser2, true, false);
+            articleService.write("제목5", "내용5", memberUser2, true, false);
 
-            IntStream.rangeClosed(6, 100)
+            IntStream.rangeClosed(3, 100)
+                    .forEach(i -> memberService.join(
+                                    "user%d".formatted(i),
+                                    "1234",
+                                    "1234"
+                            )
+                    );
+
+            IntStream.rangeClosed(6, 400)
                     .forEach(i -> articleService.write(
                                     "제목%d".formatted(i),
                                     "내용%d".formatted(i),
                                     memberUser1,
-                                    true
+                                    !(i % 3 == 0),
+                                    i % 5 == 0
                             )
                     );
         };

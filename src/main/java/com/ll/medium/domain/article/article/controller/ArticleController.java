@@ -60,6 +60,7 @@ public class ArticleController {
                 writeForm.getBody(),
                 rq.getMember(),
                 writeForm.isPublished(),
+                writeForm.isPaid(),
                 bindingResult
         );
         return rq.redirectOrBack("/", writeRs);
@@ -109,6 +110,7 @@ public class ArticleController {
                 modifyForm.getTitle(),
                 modifyForm.getBody(),
                 modifyForm.isPublished(),
+                modifyForm.isPaid(),
                 bindingResult
         );
 

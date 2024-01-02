@@ -66,13 +66,15 @@ public class ArticleService {
             String title,
             String body,
             Member author,
-            boolean isPublished
+            boolean isPublished,
+            boolean isPaid
     ) {
         Article article = Article.builder()
                 .author(author)
                 .title(title)
                 .body(body)
                 .isPublished(isPublished)
+                .isPaid(isPaid)
                 .build();
 
         articleRepository.save(article);
@@ -88,6 +90,7 @@ public class ArticleService {
             String body,
             Member author,
             boolean isPublished,
+            boolean isPaid,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
@@ -97,7 +100,7 @@ public class ArticleService {
                     null
             );
         }
-        return write(title, body, author, isPublished);
+        return write(title, body, author, isPublished, isPaid);
     }
 
     public Optional<Article> findLatest() {
@@ -128,14 +131,15 @@ public class ArticleService {
     }
 
     @Transactional
-    public void modify(Article article, String title, String body, boolean isPublished) {
+    public void modify(Article article, String title, String body, boolean isPublished, boolean isPaid) {
         article.setTitle(title);
         article.setBody(body);
         article.setPublished(isPublished);
+        article.setPaid(isPaid);
     }
 
     @Transactional
-    public RsData<Article> modify(Article article, String title, String body, boolean isPublished, BindingResult bindingResult) {
+    public RsData<Article> modify(Article article, String title, String body, boolean isPublished, boolean isPaid, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return RsData.of(
                     "400",
@@ -143,9 +147,7 @@ public class ArticleService {
                     null
             );
         }
-        article.setTitle(title);
-        article.setBody(body);
-        article.setPublished(isPublished);
+        modify(article, title, body, isPublished, isPaid);
 
         return RsData.of(
                 "200",

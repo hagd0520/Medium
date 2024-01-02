@@ -18,5 +18,7 @@ public class ArticleWriteForm {
 
     private Member member;
 
-    private boolean published;
+    private boolean isPublished;
+
+    private boolean isPaid; // TODO 체크박스 만들기
 }
