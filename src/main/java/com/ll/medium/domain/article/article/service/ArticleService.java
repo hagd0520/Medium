@@ -156,10 +156,6 @@ public class ArticleService {
         );
     }
 
-    public Optional<Article> findByUsername(String username) {
-        return articleRepository.findByAuthorUsername(username);
-    }
-
     public boolean canReadArticleIsPaid(Member member, Article article) {
         if (article.isPaid()) {
             if (member == null) return false;

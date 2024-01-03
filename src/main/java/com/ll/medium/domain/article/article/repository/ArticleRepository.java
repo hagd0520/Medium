@@ -15,8 +15,6 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByAuthorUsernameContainingAndIsPublishedTrue(String username, Pageable pageable);
 
-    Optional<Article> findByAuthorUsername(String username);
-
     Page<Article> findByIsPublishedTrue(Pageable pageable);
 
     List<Article> findTop30ByIsPublishedTrueOrderByCreateDateDesc();
