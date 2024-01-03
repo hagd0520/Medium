@@ -141,7 +141,6 @@ public class ArticleController {
     @PreAuthorize("isAuthenticated()")
     public String addVote(
             @PathVariable long id
-//         TODO   @RequestParam(defaultValue = "/") String redirectUrl
     ) {
         Article article = articleService.findById(id).orElseThrow(() -> new GlobalException("400", "존재하지 않는 글입니다."));
         articleService.addVote(rq.getMember(), article);
@@ -153,7 +152,6 @@ public class ArticleController {
     @PreAuthorize("isAuthenticated()")
     public String cancelVote(
             @PathVariable long id
-//     TODO       @RequestParam(defaultValue = "/") String redirectUrl
     ) {
         Article article = articleService.findById(id).orElseThrow(() -> new GlobalException("400", "존재하지 않는 글입니다."));
         articleService.cancelVote(rq.getMember(), article);
