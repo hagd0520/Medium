@@ -77,6 +77,8 @@ public class ArticleController {
     ) {
         Article article = articleService.findById(id).get();
 
+        article.addHit();
+
         model.addAttribute("article", article);
 
         return "article/article/detail";
