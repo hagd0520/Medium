@@ -11,7 +11,10 @@
     <h1 class="font-bold mb-2 text-3xl"></h1>
     <div class="card card-side bg-base-100 shadow-xl">
         <div class="card-body">
-            <h2 class="font-bold mb-2 text-3xl" style="white-space: pre-line;" th:text="${article.title}"></h2>
+            <div class="flex items-center">
+                <h2 class="font-bold mb-2 text-3xl" style="white-space: pre-line;" th:text="${article.title}"></h2>
+                <span th:if="${!article.published}" class="ml-2" style="color: crimson">(비공개)</span>
+            </div>
             <hr class="mb-4">
             <p
                     th:if="${@articleService.canReadArticleIsPaid(@rq.member, article)}"

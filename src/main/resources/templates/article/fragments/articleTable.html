@@ -14,17 +14,20 @@
                 <tr class="text-center" th:each="article : ${articles}">
                     <td th:text="${article.id}"></td>
                     <td class="text-start">
-                        <a
-                                th:if="${article.Paid}"
-                                style="color: cornflowerblue;"
-                                th:href="@{|/article/${article.id}/detail|}"
-                                th:text="${article.title}"
-                        ></a>
-                        <a
-                                th:if="${!article.Paid}"
-                                th:href="@{|/article/${article.id}/detail|}"
-                                th:text="${article.title}"
-                        ></a>
+                        <div class="flex">
+                            <a
+                                    th:if="${article.paid}"
+                                    style="color: cornflowerblue;"
+                                    th:href="@{|/article/${article.id}/detail|}"
+                                    th:text="${article.title}"
+                            ></a>
+                            <a
+                                    th:if="${!article.paid}"
+                                    th:href="@{|/article/${article.id}/detail|}"
+                                    th:text="${article.title}"
+                            ></a>
+                            <span th:if="${!article.published}" class="ml-2" style="color: crimson">(비공개)</span>
+                        </div>
                     </td>
                     <td><span th:if="${article.author !=null}" th:text="${article.author.username}"></span></td>
                     <td th:text="${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}"></td>
