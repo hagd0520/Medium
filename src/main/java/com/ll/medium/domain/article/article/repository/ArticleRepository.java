@@ -19,5 +19,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByIsPublishedTrue(Pageable pageable);
 
-    List<Article> findTop30ByOrderByCreateDateDesc();
+    List<Article> findTop30ByIsPublishedTrueOrderByCreateDateDesc();
 }

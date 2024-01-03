@@ -35,7 +35,7 @@ public class ArticleService {
     }
 
     public List<Article> getLast30Article() {
-        return articleRepository.findTop30ByOrderByCreateDateDesc();
+        return articleRepository.findTop30ByIsPublishedTrueOrderByCreateDateDesc();
     }
 
     public Page<Article> searchListByUsername(
