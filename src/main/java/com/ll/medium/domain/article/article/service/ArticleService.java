@@ -181,4 +181,8 @@ public class ArticleService {
     public boolean canVote(Member actor, Article article) {
         return articleVoterService.canVote(actor, article);
     }
+
+    public long countVote(Article article) {
+        return articleVoterService.countVote(article);
+    }
 }

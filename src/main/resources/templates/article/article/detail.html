@@ -31,28 +31,24 @@
                     <a
                             th:if="${@articleService.canModify(@rq.member, article)}"
                             class="btn btn-neutral mr-2" th:href="|/article/${article.id}/modify|"
-                            th:text="수정"
-                    >
-                    </a>
+                    >수정</a>
                     <a
                             method="DELETE"
                             th:if="${@articleService.canDelete(@rq.member, article)}"
                             class="btn btn-neutral mr-2" th:href="|/article/${article.id}/delete|"
                             onclick="return confirm('정말로 삭제하시겠습니까?');"
-                            th:text="삭제"
-                    ></a>
+                    >삭제</a>
                     <a
                             method="POST"
                             th:if="${@articleService.canVote(@rq.member, article)}"
                             class="btn btn-neutral hover:btn-outline" th:href="|/article/${article.id}/addVote|"
-                            th:text="추천하기"
-                    ></a>
+                    >추천하기<div class="badge" th:text="${@articleService.countVote(article)}"></div>
+                    </a>
                     <a
                             method="DELETE"
                             th:if="${!@articleService.canVote(@rq.member, article)}"
                             class="btn btn-outline btn-neutral" th:href="|/article/${article.id}/cancelVote|"
-                            th:text="추천취소"
-                    ></a>
+                    >추천취소<div class="badge" th:text="${@articleService.countVote(article)}"></div></a>
                 </div>
                 <div style="display:flex; justify-content: flex-end; align-items:flex-end;">
                     <div class="badge badge-lg badge-neutral mr-3">

@@ -34,4 +34,8 @@ public class ArticleVoterService {
 
         return !articleVoterRepository.existsByActorAndArticle(actor, article);
     }
+
+    public long countVote(Article article) {
+        return articleVoterRepository.countByArticle(article);
+    }
 }

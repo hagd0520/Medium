@@ -9,4 +9,6 @@ public interface ArticleVoterRepository extends JpaRepository<ArticleVoter, Long
     void deleteByActorAndArticle(Member actor, Article article);
 
     boolean existsByActorAndArticle(Member actor, Article article);
+
+    long countByArticle(Article article);
 }
