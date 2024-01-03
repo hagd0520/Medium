@@ -40,10 +40,13 @@
                     ></a>
                 </div>
                 <div style="display:flex; justify-content: flex-end; align-items:flex-end;">
-                    <div class="badge badge-neutral mr-3">
+                    <div class="badge badge-lg badge-neutral mr-3">
+                        <span th:if="${article.author != null}" th:text="|조회수 ${article.hit}|"></span>
+                    </div>
+                    <div class="badge badge-lg badge-neutral mr-3">
                         <span th:if="${article.author != null}" th:text="|작성자 ${article.author.username}|"></span>
                     </div>
-                    <div class="badge badge-neutral"
+                    <div class="badge badge-lg badge-neutral"
                          th:text="| 작성일 ${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}|">
                     </div>
                 </div>
