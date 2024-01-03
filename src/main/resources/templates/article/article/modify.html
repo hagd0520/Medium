@@ -34,7 +34,7 @@
         <div class="form-control">
             <label class="cursor-pointer label">
                 <span class="label-text">공개 / 비공개</span>
-                <input type="checkbox" name="published" checked="checked" class="checkbox checkbox-success" />
+                <input type="checkbox" name="published" th:checked="${article.published}" class="checkbox checkbox-success" />
             </label>
         </div>
     </form>
