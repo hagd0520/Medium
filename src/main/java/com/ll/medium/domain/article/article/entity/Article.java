@@ -17,15 +17,20 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class Article extends BaseEntity {
+public class Article extends BaseEntity { // TODO 추천 적용하기
     @ManyToOne(fetch = LAZY)
     private Member author;
     private String title;
     private String body;
+    private long hit;
     private boolean isPublished;
     private boolean isPaid;
 
     public boolean isPaid() {
         return isPaid;
+    }
+
+    public void addHit() {
+        hit = hit + 1;
     }
 }
