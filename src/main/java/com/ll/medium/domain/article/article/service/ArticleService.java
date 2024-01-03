@@ -24,6 +24,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ArticleService {
     private final ArticleRepository articleRepository;
+    private final ArticleVoterService articleVoterService;
 
     public Page<Article> getList(
             @RequestParam(defaultValue = "1") int page
@@ -165,5 +166,19 @@ public class ArticleService {
         }
 
         return true;
+    }
+
+    @Transactional
+    public void addVote(Member actor, Article article) {
+        articleVoterService.addVote(actor, article);
+    }
+
+    @Transactional
+    public void cancelVote(Member actor, Article article) {
+        articleVoterService.cancelVote(actor, article);
+    }
+
+    public boolean canVote(Member actor, Article article) {
+        return articleVoterService.canVote(actor, article);
     }
 }

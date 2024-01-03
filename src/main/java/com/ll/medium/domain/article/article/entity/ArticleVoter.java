@@ -17,20 +17,9 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class Article extends BaseEntity {
+public class ArticleVoter extends BaseEntity {
     @ManyToOne(fetch = LAZY)
-    private Member author;
-    private String title;
-    private String body;
-    private long hit;
-    private boolean isPublished;
-    private boolean isPaid;
-
-    public boolean isPaid() {
-        return isPaid;
-    }
-
-    public void addHit() {
-        hit = hit + 1;
-    }
+    private Article article;
+    @ManyToOne(fetch = LAZY)
+    private Member actor;
 }

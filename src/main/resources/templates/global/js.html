@@ -4,9 +4,14 @@
 </script>
 
 <script>
-    localStorage.setItem('historyBackMsg', msg);
-    if (exStr) {
-        sessionStorage.setItem('exStr__' + new Date(), exStr);
+
+    if (msg) {
+        sessionStorage.setItem('historyBackMsg', msg);
     }
+
+    if (exStr) {
+        localStorage.setItem('exStr__' + new Date(), exStr);
+    }
+
     history.back();
 </script>

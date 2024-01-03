@@ -4,6 +4,7 @@ import com.ll.medium.domain.article.article.entity.Article;
 import com.ll.medium.domain.article.article.entity.ArticleModifyForm;
 import com.ll.medium.domain.article.article.entity.ArticleWriteForm;
 import com.ll.medium.domain.article.article.service.ArticleService;
+import com.ll.medium.domain.exceptions.GlobalException.GlobalException;
 import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
 import jakarta.validation.Valid;
@@ -85,6 +86,7 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}/delete")
+    @PreAuthorize("isAuthenticated()")
     public String delete(
             @PathVariable long id
     ) {
@@ -113,7 +115,7 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("{id}/modify")
+    @PutMapping("/{id}/modify")
     public String modify(
             @PathVariable long id,
             @Valid ArticleModifyForm modifyForm,
@@ -133,5 +135,29 @@ public class ArticleController {
         );
 
         return rq.redirectOrBack("/article/%d/detail".formatted(id), modifyRs);
+    }
+
+    @PostMapping("/{id}/addVote")
+    @PreAuthorize("isAuthenticated()")
+    public String addVote(
+            @PathVariable long id
+//         TODO   @RequestParam(defaultValue = "/") String redirectUrl
+    ) {
+        Article article = articleService.findById(id).orElseThrow(() -> new GlobalException("400", "존재하지 않는 글입니다."));
+        articleService.addVote(rq.getMember(), article);
+
+        return rq.historyBack("추천하셨습니다.");
+    }
+
+    @DeleteMapping("/{id}/cancelVote")
+    @PreAuthorize("isAuthenticated()")
+    public String cancelVote(
+            @PathVariable long id
+//     TODO       @RequestParam(defaultValue = "/") String redirectUrl
+    ) {
+        Article article = articleService.findById(id).orElseThrow(() -> new GlobalException("400", "존재하지 않는 글입니다."));
+        articleService.cancelVote(rq.getMember(), article);
+
+        return rq.historyBack("추천하셨습니다.");
     }
 }

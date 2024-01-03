@@ -1,5 +1,6 @@
 package com.ll.medium.global.rq;
 
+import com.ll.medium.domain.exceptions.GlobalException.GlobalException;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.global.rsData.RsData;
@@ -9,6 +10,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @RequestScope
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class Rq {
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
@@ -70,6 +73,15 @@ public class Rq {
 
     public String historyBack(RsData<?> rs) {
         return historyBack(rs.getMsg());
+    }
+
+    public String historyBack(GlobalException ex) {
+        String exStr = Ut.exception.toString(ex);
+
+        req.setAttribute("exStr", exStr);
+        log.debug(exStr);
+
+        return historyBack(ex.getRsData().getMsg());
     }
 
     public String redirectOrBack(String url, RsData<?> rs) {
