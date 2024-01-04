@@ -1,7 +1,6 @@
 package com.ll.medium.domain.article.article.controller;
 
 import com.ll.medium.domain.article.article.entity.Article;
-import com.ll.medium.domain.article.article.entity.ArticleModifyForm;
 import com.ll.medium.domain.article.article.entity.ArticleWriteForm;
 import com.ll.medium.domain.article.article.service.ArticleService;
 import com.ll.medium.domain.exceptions.GlobalException.GlobalException;
@@ -118,7 +117,7 @@ public class ArticleController {
     @PutMapping("/{id}/modify")
     public String modify(
             @PathVariable long id,
-            @Valid ArticleModifyForm modifyForm,
+            @Valid ArticleWriteForm writeForm,
             BindingResult bindingResult
     ) {
         Article article = articleService.findById(id).get();
@@ -127,10 +126,10 @@ public class ArticleController {
 
         RsData<Article> modifyRs = articleService.modify(
                 article,
-                modifyForm.getTitle(),
-                modifyForm.getBody(),
-                modifyForm.isPublished(),
-                modifyForm.isPaid(),
+                writeForm.getTitle(),
+                writeForm.getBody(),
+                writeForm.isPublished(),
+                writeForm.isPaid(),
                 bindingResult
         );
 
