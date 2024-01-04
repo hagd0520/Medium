@@ -1,6 +1,6 @@
 package com.ll.medium.domain.article.article.entity;
 
-import com.ll.medium.domain.article.articleComment.entity.ArticleComment;
+import com.ll.medium.domain.article.comment.entity.Comment;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
@@ -33,7 +33,7 @@ public class Article extends BaseEntity {
     private boolean isPaid;
     @OneToMany(mappedBy = "article", cascade = ALL, orphanRemoval = true)
     @Builder.Default
-    private List<ArticleComment> ArticleComments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public boolean isPaid() {
         return isPaid;
@@ -43,8 +43,8 @@ public class Article extends BaseEntity {
         hit = hit + 1;
     }
 
-    public void addArticleComment(Member author, String body) {
-        ArticleComment articleComment = ArticleComment.builder()
+    public void addComment(Member author, String body) {
+        Comment comment = Comment.builder()
                 .article(this)
                 .author(author)
                 .body(body)

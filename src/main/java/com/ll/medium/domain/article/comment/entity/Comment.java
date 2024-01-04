@@ -1,4 +1,4 @@
-package com.ll.medium.domain.article.articleComment.entity;
+package com.ll.medium.domain.article.comment.entity;
 
 import com.ll.medium.domain.article.article.entity.Article;
 import com.ll.medium.domain.member.member.entity.Member;
@@ -18,7 +18,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class ArticleComment extends BaseEntity {
+public class Comment extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     private Article article;
     @ManyToOne(fetch = LAZY)
