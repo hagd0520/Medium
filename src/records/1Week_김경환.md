@@ -71,6 +71,7 @@ AppConfig.siteBaseUrl = siteBaseUrl;
     - 공식에 나와있는 button 이 아닌 a 을 사용함으로써 해결
 - isPublished 필드값을 html의 체크박스를 통해 전달 받는 과정에서 오류가 있었다.
   - html에서 해당 인풋 엘리멘털의 name 값을 published로 수정함으로써 해결
-
+- 홈 화면에 최근 30개의 게시글 리스트를 띄우는데 있어 paging 을 활용하려 했으나 리포지터리를 활용해 최근 30개의 게시글을 페이징하는 것은 별도의 작업이 필요했다.
+  - paging 은 재고해두고 최근 30개의 article을 list로 가져오는 방식을 사용하였다.
 ---
 **[수정사항]**

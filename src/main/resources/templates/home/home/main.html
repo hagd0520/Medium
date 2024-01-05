@@ -4,10 +4,9 @@
     <title>홈</title>
 </head>
 
-<div layout:fragment="content">
+<div layout:fragment="content" class="container mx-auto my-3">
 
-    <div style="display:flex; justify-content:center;">홈</div>
-
+    <th:block th:replace="article/fragments/articleTable :: articleTable(${articleList})"></th:block>
 
 </div>
 </html>

@@ -11,25 +11,53 @@
     <h1 class="font-bold mb-2 text-3xl"></h1>
     <div class="card card-side bg-base-100 shadow-xl">
         <div class="card-body">
-            <h2 class="font-bold mb-2 text-3xl" style="white-space: pre-line;" th:text="${article.title}"></h2>
+            <div class="flex items-center">
+                <h2 class="font-bold mb-2 text-3xl" style="white-space: pre-line;" th:text="${article.title}"></h2>
+                <span th:if="${!article.published}" class="ml-2" style="color: crimson">(비공개)</span>
+            </div>
             <hr class="mb-4">
-            <p class="font-bold mb-4" th:text="${article.body}"></p>
+            <p
+                    th:if="${@articleService.canReadArticleIsPaid(@rq.member, article)}"
+                    class="font-bold mb-4"
+                    th:text="${article.body}"
+            ></p>
+            <p
+                    th:if="${!@articleService.canReadArticleIsPaid(@rq.member, article)}"
+                    class="font-bold mb-4"
+                    style="color: cornflowerblue"
+            >이 글은 유료 멤버십 전용입니다.</p>
             <div>
                 <div class="mb-2" style="display:flex; justify-content: flex-end; align-items: flex-end;">
-                    <a th:if="${@articleService.canModify(@rq.member, article)}"
-                       class="btn btn-neutral mr-2" th:href="|/article/modify/${article.id}|"
-                            th:text="수정">
-                    </a>
-                    <a th:if="${@articleService.canDelete(@rq.member, article)}"
-                            class="btn btn-neutral" th:href="|/article/delete/${article.id}|"
+                    <a
+                            th:if="${@articleService.canModify(@rq.member, article)}"
+                            class="btn btn-neutral mr-2" th:href="|/article/${article.id}/modify|"
+                    >수정</a>
+                    <a
+                            method="DELETE"
+                            th:if="${@articleService.canDelete(@rq.member, article)}"
+                            class="btn btn-neutral mr-2" th:href="|/article/${article.id}/delete|"
                             onclick="return confirm('정말로 삭제하시겠습니까?');"
-                            th:text="삭제"></a>
+                    >삭제</a>
+                    <a
+                            method="POST"
+                            th:if="${@articleService.canVote(@rq.member, article)}"
+                            class="btn btn-neutral hover:btn-outline" th:href="|/article/${article.id}/addVote|"
+                    >추천하기<div class="badge" th:text="${@articleService.countVote(article)}"></div>
+                    </a>
+                    <a
+                            method="DELETE"
+                            th:if="${!@articleService.canVote(@rq.member, article)}"
+                            class="btn btn-outline btn-neutral" th:href="|/article/${article.id}/cancelVote|"
+                    >추천취소<div class="badge" th:text="${@articleService.countVote(article)}"></div></a>
                 </div>
                 <div style="display:flex; justify-content: flex-end; align-items:flex-end;">
-                    <div class="badge badge-neutral mr-3">
+                    <div class="badge badge-lg badge-neutral mr-3">
+                        <span th:if="${article.author != null}" th:text="|조회수 ${article.hit}|"></span>
+                    </div>
+                    <div class="badge badge-lg badge-neutral mr-3">
                         <span th:if="${article.author != null}" th:text="|작성자 ${article.author.username}|"></span>
                     </div>
-                    <div class="badge badge-neutral"
+                    <div class="badge badge-lg badge-neutral"
                          th:text="| 작성일 ${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}|">
                     </div>
                 </div>

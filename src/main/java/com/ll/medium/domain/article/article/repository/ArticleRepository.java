@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
@@ -14,7 +15,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByAuthorUsernameContainingAndIsPublishedTrue(String username, Pageable pageable);
 
-    Optional<Article> findByAuthorUsername(String username);
-
     Page<Article> findByIsPublishedTrue(Pageable pageable);
+
+    List<Article> findTop30ByIsPublishedTrueOrderByCreateDateDesc();
 }

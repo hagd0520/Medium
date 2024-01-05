@@ -1,9 +1,9 @@
 package com.ll.medium.domain.article.article.controller;
 
 import com.ll.medium.domain.article.article.entity.Article;
-import com.ll.medium.domain.article.article.entity.ArticleModifyForm;
 import com.ll.medium.domain.article.article.entity.ArticleWriteForm;
 import com.ll.medium.domain.article.article.service.ArticleService;
+import com.ll.medium.domain.exceptions.GlobalException.GlobalException;
 import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
 import jakarta.validation.Valid;
@@ -23,14 +23,14 @@ public class ArticleController {
     private final Rq rq;
 
     @GetMapping("/list")
-    public String showList(Model model,
-                           @RequestParam(value = "kwUsername", defaultValue = "") String kwUsername,
-                           @RequestParam(value = "page", defaultValue = "0") int page) {
+    public String showList(
+            Model model,
+            @RequestParam(value = "kwUsername", defaultValue = "") String kwUsername,
+            @RequestParam(value = "page", defaultValue = "0") int page
+    ) {
         Page<Article> paging = null;
-        if (kwUsername.equals(""))
-            paging = articleService.getList(page);
-        if (!kwUsername.equals(""))
-            paging = articleService.searchListByUsername(kwUsername, page);
+        if (kwUsername.equals("")) paging = articleService.getList(page);
+        if (!kwUsername.equals("")) paging = articleService.searchListByUsername(kwUsername, page);
         model.addAttribute("paging", paging);
         model.addAttribute("kwUsername", kwUsername);
         return "article/article/list";
@@ -38,8 +38,10 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myList")
-    public String showMyList(Model model,
-                             @RequestParam(value = "page", defaultValue = "0") int page) {
+    public String showMyList(
+            Model model,
+            @RequestParam(value = "page", defaultValue = "0") int page
+    ) {
         Page<Article> paging = articleService.getMyList(page);
         model.addAttribute("paging", paging);
         return "article/article/myList";
@@ -53,30 +55,40 @@ public class ArticleController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
-    public String write(@Valid ArticleWriteForm writeForm, BindingResult bindingResult) {
-
-
+    public String write(
+            @Valid ArticleWriteForm writeForm,
+            BindingResult bindingResult
+    ) {
         RsData<Article> writeRs = articleService.write(
                 writeForm.getTitle(),
                 writeForm.getBody(),
                 rq.getMember(),
                 writeForm.isPublished(),
+                writeForm.isPaid(),
                 bindingResult
         );
         return rq.redirectOrBack("/", writeRs);
     }
 
-    @GetMapping("/detail/{id}")
-    public String showDetail(Model model, @PathVariable long id) {
+    @GetMapping("/{id}/detail")
+    public String showDetail(
+            Model model,
+            @PathVariable long id
+    ) {
         Article article = articleService.findById(id).get();
+
+        article.addHit();
 
         model.addAttribute("article", article);
 
         return "article/article/detail";
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(@PathVariable long id) {
+    @DeleteMapping("/{id}/delete")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(
+            @PathVariable long id
+    ) {
         Article article = articleService.findById(id).get();
 
         if (!articleService.canDelete(rq.getMember(), article)) throw new RuntimeException("삭제 권한이 없습니다.");
@@ -87,8 +99,11 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/modify/{id}")
-    public String showModify(Model model, @PathVariable long id) {
+    @GetMapping("/{id}/modify")
+    public String showModify(
+            Model model,
+            @PathVariable long id
+    ) {
         Article article = articleService.findById(id).get();
 
         if (!articleService.canModify(rq.getMember(), article)) throw new RuntimeException("수정 권한이 없습니다.");
@@ -99,14 +114,47 @@ public class ArticleController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/modify/{id}")
-    public String modify(@PathVariable long id, @Valid ArticleModifyForm modifyForm) {
+    @PutMapping("/{id}/modify")
+    public String modify(
+            @PathVariable long id,
+            @Valid ArticleWriteForm writeForm,
+            BindingResult bindingResult
+    ) {
         Article article = articleService.findById(id).get();
 
         if (!articleService.canModify(rq.getMember(), article)) throw new RuntimeException("수정 권한이 없습니다.");
 
-        articleService.modify(article, modifyForm.getTitle(), modifyForm.getBody(), modifyForm.isPublished());
+        RsData<Article> modifyRs = articleService.modify(
+                article,
+                writeForm.getTitle(),
+                writeForm.getBody(),
+                writeForm.isPublished(),
+                writeForm.isPaid(),
+                bindingResult
+        );
 
-        return rq.redirect("/article/detail/%d".formatted(id), "게시물이 수정되었습니다.");
+        return rq.redirectOrBack("/article/%d/detail".formatted(id), modifyRs);
+    }
+
+    @PostMapping("/{id}/addVote")
+    @PreAuthorize("isAuthenticated()")
+    public String addVote(
+            @PathVariable long id
+    ) {
+        Article article = articleService.findById(id).orElseThrow(() -> new GlobalException("400", "존재하지 않는 글입니다."));
+        articleService.addVote(rq.getMember(), article);
+
+        return rq.historyBack("추천하셨습니다.");
+    }
+
+    @DeleteMapping("/{id}/cancelVote")
+    @PreAuthorize("isAuthenticated()")
+    public String cancelVote(
+            @PathVariable long id
+    ) {
+        Article article = articleService.findById(id).orElseThrow(() -> new GlobalException("400", "존재하지 않는 글입니다."));
+        articleService.cancelVote(rq.getMember(), article);
+
+        return rq.historyBack("추천하셨습니다.");
     }
 }

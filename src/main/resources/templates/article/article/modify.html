@@ -12,6 +12,7 @@
     </div>
 
     <form th:action class="flex flex-col gap-4" method="POST" onsubmit="submitWriteForm(this); return false;">
+        <input type="hidden" name="_method" value="PUT">
         <div class="form-control">
             <label class="label">
                 <span class="label-text">제목</span>
@@ -33,7 +34,7 @@
         <div class="form-control">
             <label class="cursor-pointer label">
                 <span class="label-text">공개 / 비공개</span>
-                <input type="checkbox" name="published" checked="checked" class="checkbox checkbox-success" />
+                <input type="checkbox" name="published" th:checked="${article.published}" class="checkbox checkbox-success" />
             </label>
         </div>
     </form>

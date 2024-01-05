@@ -24,6 +24,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class ArticleService {
     private final ArticleRepository articleRepository;
+    private final ArticleVoterService articleVoterService;
 
     public Page<Article> getList(
             @RequestParam(defaultValue = "1") int page
@@ -34,8 +35,13 @@ public class ArticleService {
         return articleRepository.findByIsPublishedTrue(pageable);
     }
 
-    public Page<Article> searchListByUsername(String username,
-                                           @RequestParam int page
+    public List<Article> getLast30Article() {
+        return articleRepository.findTop30ByIsPublishedTrueOrderByCreateDateDesc();
+    }
+
+    public Page<Article> searchListByUsername(
+            String username,
+            @RequestParam int page
     ) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
@@ -61,27 +67,31 @@ public class ArticleService {
             String title,
             String body,
             Member author,
-            boolean isPublished
+            boolean isPublished,
+            boolean isPaid
     ) {
         Article article = Article.builder()
                 .author(author)
                 .title(title)
                 .body(body)
                 .isPublished(isPublished)
+                .isPaid(isPaid)
                 .build();
 
         articleRepository.save(article);
 
         return RsData.of("200",
                 "글이 작성되었습니다.",
-                articleRepository.save(article));
+                article);
     }
 
+    @Transactional
     public RsData<Article> write(
             String title,
             String body,
             Member author,
             boolean isPublished,
+            boolean isPaid,
             BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
@@ -91,7 +101,7 @@ public class ArticleService {
                     null
             );
         }
-        return write(title, body, author, isPublished);
+        return write(title, body, author, isPublished, isPaid);
     }
 
     public Optional<Article> findLatest() {
@@ -122,13 +132,57 @@ public class ArticleService {
     }
 
     @Transactional
-    public void modify(Article article, String title, String body, boolean isPublished) {
+    public void modify(Article article, String title, String body, boolean isPublished, boolean isPaid) {
         article.setTitle(title);
         article.setBody(body);
         article.setPublished(isPublished);
+        article.setPaid(isPaid);
     }
 
-    public Optional<Article> findByUsername(String username) {
-        return articleRepository.findByAuthorUsername(username);
+    @Transactional
+    public RsData<Article> modify(Article article, String title, String body, boolean isPublished, boolean isPaid, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return RsData.of(
+                    "400",
+                    bindingResult.getFieldError().getDefaultMessage(),
+                    null
+            );
+        }
+        modify(article, title, body, isPublished, isPaid);
+
+        return RsData.of(
+                "200",
+                "글이 수정되었습니다.",
+                article
+        );
+    }
+
+    public boolean canReadArticleIsPaid(Member member, Article article) {
+        if (article.isPaid()) {
+            if (member == null) return false;
+            if (member.isAdmin()) return true;
+            if (member.equals(article.getAuthor())) return true;
+            if (!member.isPaid()) return false;
+        }
+
+        return true;
+    }
+
+    @Transactional
+    public void addVote(Member actor, Article article) {
+        articleVoterService.addVote(actor, article);
+    }
+
+    @Transactional
+    public void cancelVote(Member actor, Article article) {
+        articleVoterService.cancelVote(actor, article);
+    }
+
+    public boolean canVote(Member actor, Article article) {
+        return articleVoterService.canVote(actor, article);
+    }
+
+    public long countVote(Article article) {
+        return articleVoterService.countVote(article);
     }
 }

@@ -22,5 +22,26 @@ public class Article extends BaseEntity {
     private Member author;
     private String title;
     private String body;
+    private long hit;
     private boolean isPublished;
+    private boolean isPaid;
+//    @OneToMany(mappedBy = "article", cascade = ALL, orphanRemoval = true)
+//    @Builder.Default
+//    private List<Comment> comments = new ArrayList<>();
+
+    public boolean isPaid() {
+        return isPaid;
+    }
+
+    public void addHit() {
+        hit = hit + 1;
+    }
+
+//    public void addComment(Member author, String body) {
+//        Comment comment = Comment.builder()
+//                .article(this)
+//                .author(author)
+//                .body(body)
+//                .build();
+//    }
 }

@@ -1,0 +1,39 @@
+<th:block th:fragment="articleTable(articles)">
+    <div class="card-side bg-base-100 shadow-xl">
+        <div class="card-body">
+            <table class="table">
+                <thread>
+                    <tr class="text-center">
+                        <th>번호</th>
+                        <th style="width:50%">제목</th>
+                        <th>글쓴이</th>
+                        <th>작성일시</th>
+                    </tr>
+                </thread>
+                <tbody>
+                <tr class="text-center" th:each="article : ${articles}">
+                    <td th:text="${article.id}"></td>
+                    <td class="text-start">
+                        <div class="flex">
+                            <a
+                                    th:if="${article.paid}"
+                                    style="color: cornflowerblue;"
+                                    th:href="@{|/article/${article.id}/detail|}"
+                                    th:text="${article.title}"
+                            ></a>
+                            <a
+                                    th:if="${!article.paid}"
+                                    th:href="@{|/article/${article.id}/detail|}"
+                                    th:text="${article.title}"
+                            ></a>
+                            <span th:if="${!article.published}" class="ml-2" style="color: crimson">(비공개)</span>
+                        </div>
+                    </td>
+                    <td><span th:if="${article.author !=null}" th:text="${article.author.username}"></span></td>
+                    <td th:text="${#temporals.format(article.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</th:block>

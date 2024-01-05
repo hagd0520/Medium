@@ -1,6 +1,5 @@
 package com.ll.medium.domain.article.article.entity;
 
-import com.ll.medium.domain.member.member.entity.Member;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -16,7 +15,7 @@ public class ArticleWriteForm {
     @NotEmpty(message = "내용을 입력해주세요.")
     private String body;
 
-    private Member member;
+    private boolean isPublished;
 
-    private boolean published;
+    private boolean isPaid;
 }
