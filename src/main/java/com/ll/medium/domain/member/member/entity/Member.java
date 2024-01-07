@@ -1,13 +1,15 @@
 package com.ll.medium.domain.member.member.entity;
 
 import com.ll.medium.global.jpa.BaseEntity;
+import com.ll.medium.global.security.SecurityUser;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Transient;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.List;
+import java.util.Optional;
 
 import static lombok.AccessLevel.PROTECTED;
 
@@ -24,19 +26,18 @@ public class Member extends BaseEntity {
     private boolean isPaid;
 
     public boolean isAdmin() {
-        return username.equals("admin");
+        return Optional.ofNullable(SecurityContextHolder.getContext())
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getPrincipal)
+                .filter(it -> it instanceof SecurityUser)
+                .map(it -> (SecurityUser) it)
+                .orElse(null)
+                .getAuthorities()
+                .stream()
+                .anyMatch(it -> it.getAuthority().equals(MemberRole.ADMIN.getValue()));
     }
 
     public boolean isPaid() {
         return isPaid;
-    }
-
-    @Transient
-    public List<SimpleGrantedAuthority> getAuthorities() {
-        if (isAdmin()) {
-            return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_MEMBER"));
-        }
-
-        return List.of(new SimpleGrantedAuthority("ROLE_MEMBER"));
     }
 }

@@ -33,6 +33,7 @@ public class ArticleController {
         if (!kwUsername.equals("")) paging = articleService.searchListByUsername(kwUsername, page);
         model.addAttribute("paging", paging);
         model.addAttribute("kwUsername", kwUsername);
+
         return "article/article/list";
     }
 

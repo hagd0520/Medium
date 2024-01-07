@@ -64,4 +64,5 @@ public class MemberService {
     public Optional<Member> findLatest() {
         return memberRepository.findFirstByOrderByIdDesc();
     }
+
 }

@@ -29,10 +29,6 @@ public class Article extends BaseEntity {
 //    @Builder.Default
 //    private List<Comment> comments = new ArrayList<>();
 
-    public boolean isPaid() {
-        return isPaid;
-    }
-
     public void addHit() {
         hit = hit + 1;
     }

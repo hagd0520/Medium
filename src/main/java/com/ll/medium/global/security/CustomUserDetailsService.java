@@ -29,17 +29,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         Member member = memberOp.get();
-        List<GrantedAuthority> authorites = new ArrayList<>();
+        List<GrantedAuthority> authorities = new ArrayList<>();
 
-        if ("admin".equals(username)) authorites.add(new SimpleGrantedAuthority(ADMIN.getValue()));
-        if (member.isPaid()) authorites.add(new SimpleGrantedAuthority(PAID.getValue()));
-        else authorites.add(new SimpleGrantedAuthority(USER.getValue()));
+        if ("admin".equals(username)) authorities.add(new SimpleGrantedAuthority(ADMIN.getValue()));
+        if (member.isPaid()) authorities.add(new SimpleGrantedAuthority(PAID.getValue()));
+        else authorities.add(new SimpleGrantedAuthority(USER.getValue()));
 
         return new SecurityUser(
                 member.getId(),
                 member.getUsername(),
                 member.getPassword(),
-                member.getAuthorities()
+                authorities
         );
     }
 }
