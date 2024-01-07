@@ -12,7 +12,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -85,25 +84,6 @@ public class ArticleService {
                 article);
     }
 
-    @Transactional
-    public RsData<Article> write(
-            String title,
-            String body,
-            Member author,
-            boolean isPublished,
-            boolean isPaid,
-            BindingResult bindingResult
-    ) {
-        if (bindingResult.hasErrors()) {
-            return RsData.of(
-                    "400",
-                    bindingResult.getFieldError().getDefaultMessage(),
-                    null
-            );
-        }
-        return write(title, body, author, isPublished, isPaid);
-    }
-
     public Optional<Article> findLatest() {
         return articleRepository.findFirstByOrderByIdDesc();
     }
@@ -132,23 +112,11 @@ public class ArticleService {
     }
 
     @Transactional
-    public void modify(Article article, String title, String body, boolean isPublished, boolean isPaid) {
+    public RsData<Article> modify(Article article, String title, String body, boolean isPublished, boolean isPaid) {
         article.setTitle(title);
         article.setBody(body);
         article.setPublished(isPublished);
         article.setPaid(isPaid);
-    }
-
-    @Transactional
-    public RsData<Article> modify(Article article, String title, String body, boolean isPublished, boolean isPaid, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return RsData.of(
-                    "400",
-                    bindingResult.getFieldError().getDefaultMessage(),
-                    null
-            );
-        }
-        modify(article, title, body, isPublished, isPaid);
 
         return RsData.of(
                 "200",

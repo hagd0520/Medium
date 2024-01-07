@@ -1,4 +1,4 @@
-package com.ll.medium.domain.member.member.entity;
+package com.ll.medium.domain.member.member.form;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;

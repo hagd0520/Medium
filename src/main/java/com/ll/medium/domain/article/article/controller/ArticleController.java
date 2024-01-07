@@ -1,7 +1,7 @@
 package com.ll.medium.domain.article.article.controller;
 
 import com.ll.medium.domain.article.article.entity.Article;
-import com.ll.medium.domain.article.article.entity.ArticleWriteForm;
+import com.ll.medium.domain.article.article.form.ArticleWriteForm;
 import com.ll.medium.domain.article.article.service.ArticleService;
 import com.ll.medium.domain.exceptions.GlobalException.GlobalException;
 import com.ll.medium.global.rq.Rq;
@@ -60,13 +60,24 @@ public class ArticleController {
             @Valid ArticleWriteForm writeForm,
             BindingResult bindingResult
     ) {
-        RsData<Article> writeRs = articleService.write(
+        RsData<Article> writeRs;
+
+        if (bindingResult.hasErrors()) {
+            writeRs = RsData.of(
+                    "400",
+                    bindingResult.getFieldError().getDefaultMessage(),
+                    null
+            );
+            return rq.redirectOrBack("/", writeRs);
+
+        }
+
+        writeRs = articleService.write(
                 writeForm.getTitle(),
                 writeForm.getBody(),
                 rq.getMember(),
                 writeForm.isPublished(),
-                writeForm.isPaid(),
-                bindingResult
+                writeForm.isPaid()
         );
         return rq.redirectOrBack("/", writeRs);
     }
@@ -125,13 +136,23 @@ public class ArticleController {
 
         if (!articleService.canModify(rq.getMember(), article)) throw new RuntimeException("수정 권한이 없습니다.");
 
-        RsData<Article> modifyRs = articleService.modify(
+        RsData<Article> modifyRs;
+
+        if (bindingResult.hasErrors()) {
+            modifyRs = RsData.of(
+                    "400",
+                    bindingResult.getFieldError().getDefaultMessage(),
+                    null
+            );
+            return rq.redirectOrBack("/article/%d/detail".formatted(id), modifyRs);
+        }
+
+        modifyRs = articleService.modify(
                 article,
                 writeForm.getTitle(),
                 writeForm.getBody(),
                 writeForm.isPublished(),
-                writeForm.isPaid(),
-                bindingResult
+                writeForm.isPaid()
         );
 
         return rq.redirectOrBack("/article/%d/detail".formatted(id), modifyRs);

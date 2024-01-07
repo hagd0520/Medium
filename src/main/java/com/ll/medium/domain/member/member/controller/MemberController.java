@@ -1,7 +1,7 @@
 package com.ll.medium.domain.member.member.controller;
 
 import com.ll.medium.domain.member.member.entity.Member;
-import com.ll.medium.domain.member.member.entity.MemberJoinForm;
+import com.ll.medium.domain.member.member.form.MemberJoinForm;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
