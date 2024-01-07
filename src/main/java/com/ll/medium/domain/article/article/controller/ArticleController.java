@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,15 +23,14 @@ public class ArticleController {
 
     @GetMapping("/list")
     public String showList(
-            Model model,
             @RequestParam(value = "kwUsername", defaultValue = "") String kwUsername,
             @RequestParam(value = "page", defaultValue = "0") int page
     ) {
         Page<Article> paging = null;
         if (kwUsername.equals("")) paging = articleService.getList(page);
         if (!kwUsername.equals("")) paging = articleService.searchListByUsername(kwUsername, page);
-        model.addAttribute("paging", paging);
-        model.addAttribute("kwUsername", kwUsername);
+        rq.attr("paging", paging);
+        rq.attr("kwUsername", kwUsername);
 
         return "article/article/list";
     }
@@ -40,11 +38,10 @@ public class ArticleController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myList")
     public String showMyList(
-            Model model,
             @RequestParam(value = "page", defaultValue = "0") int page
     ) {
         Page<Article> paging = articleService.getMyList(page);
-        model.addAttribute("paging", paging);
+        rq.attr("paging", paging);
         return "article/article/myList";
     }
 
@@ -84,14 +81,13 @@ public class ArticleController {
 
     @GetMapping("/{id}/detail")
     public String showDetail(
-            Model model,
             @PathVariable long id
     ) {
         Article article = articleService.findById(id).get();
 
         article.addHit();
 
-        model.addAttribute("article", article);
+        rq.attr("article", article);
 
         return "article/article/detail";
     }
@@ -113,14 +109,13 @@ public class ArticleController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/modify")
     public String showModify(
-            Model model,
             @PathVariable long id
     ) {
         Article article = articleService.findById(id).get();
 
         if (!articleService.canModify(rq.getMember(), article)) throw new RuntimeException("수정 권한이 없습니다.");
 
-        model.addAttribute("article", article);
+        rq.attr("article", article);
 
         return "article/article/modify";
     }

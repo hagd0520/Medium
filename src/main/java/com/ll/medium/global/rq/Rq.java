@@ -125,4 +125,8 @@ public class Rq {
 
         return url;
     }
+
+    public void attr(String key, Object value) {
+        req.setAttribute(key, value);
+    }
 }
