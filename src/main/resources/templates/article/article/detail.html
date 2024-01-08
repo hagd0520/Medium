@@ -4,6 +4,8 @@
     <title th:text="|게시글 내용 - ${article.id}. ${article.title}|"></title>
 </head>
 
+<body>
+
 <div layout:fragment="content" class="container mx-auto my-3">
 
     <div class="font-bold text-3xl">게시글 내용</div>
@@ -42,13 +44,16 @@
                             method="POST"
                             th:if="${@articleService.canVote(@rq.member, article)}"
                             class="btn btn-neutral hover:btn-outline" th:href="|/article/${article.id}/addVote|"
-                    >추천하기<div class="badge" th:text="${@articleService.countVote(article)}"></div>
+                    >추천하기
+                        <div class="badge" th:text="${@articleService.countVote(article)}"></div>
                     </a>
                     <a
                             method="DELETE"
                             th:if="${!@articleService.canVote(@rq.member, article)}"
                             class="btn btn-outline btn-neutral" th:href="|/article/${article.id}/cancelVote|"
-                    >추천취소<div class="badge" th:text="${@articleService.countVote(article)}"></div></a>
+                    >추천취소
+                        <div class="badge" th:text="${@articleService.countVote(article)}"></div>
+                    </a>
                 </div>
                 <div style="display:flex; justify-content: flex-end; align-items:flex-end;">
                     <div class="badge badge-lg badge-neutral mr-3">
@@ -65,8 +70,44 @@
         </div>
     </div>
 
-    </body>
+    <div class="card mb-3 shadow-xl" th:each="comment : ${comments}">
+        <div class="card-body">
+            <h2 class="card-title" th:text="|작성자 : ${comment.author.username}|"></h2>
+            <p th:text="${comment.body}"></p>
+            <div class="card-actions justify-end">
+                <button class="btn">Buy Now</button>
+            </div>
+        </div>
+    </div>
 
+    <form th:action="|/comment/write/${article.id}|" class="flex flex-col gap-4" method="POST" onsubmit="submitWriteForm(this); return false;">
+        <div class="form-control">
+            <label class="label">
+                <span class="label-text font-bold">댓글</span>
+            </label>
+            <textarea name="body" rows="5" maxlength="10000" placeholder="내용을 입력해주세요."
+                      class="textarea textarea-bordered"></textarea>
+        </div>
+        <button class="btn btn-accent btn-block" type="submit">
+            댓글 작성
+        </button>
+    </form>
+
+    <script>
+        function submitWriteForm(form) {
+            form.body.value = form.body.value.trim();
+
+            if (form.body.value.length == 0) {
+                toastWarning('내용을 입력해주세요.');
+                form.body.focus();
+
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
 </div>
+</body>
 
 </html>

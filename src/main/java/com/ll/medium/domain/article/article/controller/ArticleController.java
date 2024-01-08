@@ -3,6 +3,8 @@ package com.ll.medium.domain.article.article.controller;
 import com.ll.medium.domain.article.article.entity.Article;
 import com.ll.medium.domain.article.article.form.ArticleWriteForm;
 import com.ll.medium.domain.article.article.service.ArticleService;
+import com.ll.medium.domain.article.comment.entity.Comment;
+import com.ll.medium.domain.article.comment.service.CommentService;
 import com.ll.medium.domain.exceptions.GlobalException.GlobalException;
 import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
@@ -14,11 +16,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/article")
 @RequiredArgsConstructor
 public class ArticleController {
     private final ArticleService articleService;
+    private final CommentService commentService;
     private final Rq rq;
 
     @GetMapping("/list")
@@ -84,10 +89,12 @@ public class ArticleController {
             @PathVariable long id
     ) {
         Article article = articleService.findById(id).get();
+        List<Comment> comments = commentService.findByArticle(article);
 
         article.addHit();
 
         rq.attr("article", article);
+        rq.attr("comments", comments);
 
         return "article/article/detail";
     }

@@ -2,16 +2,16 @@ package com.ll.medium.domain.article.comment.controller;
 
 import com.ll.medium.domain.article.article.entity.Article;
 import com.ll.medium.domain.article.article.service.ArticleService;
+import com.ll.medium.domain.article.comment.entity.Comment;
+import com.ll.medium.domain.article.comment.form.CommentForm;
 import com.ll.medium.domain.article.comment.service.CommentService;
-import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.global.rq.Rq;
-import jakarta.validation.constraints.NotEmpty;
+import com.ll.medium.global.rsData.RsData;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/comment")
 @PreAuthorize("isAuthenticated()")
 @RequiredArgsConstructor
-@Validated
 public class CommentController {
     private final CommentService commentService;
     private final ArticleService articleService;
@@ -29,13 +28,29 @@ public class CommentController {
     @PostMapping("/write/{id}")
     public String writeComment(
             @PathVariable long id,
-            @NotEmpty String body,
+            @Valid CommentForm commentForm,
             BindingResult bindingResult
     ) {
-        Article article = articleService.findById(id);
-        Member member = rq.getMember();
-        if (bindingResult.hasErrors()) {
+        Article article = articleService.findById(id).get();
 
+        RsData<Comment> commentWriteRs;
+
+        if (bindingResult.hasErrors()) {
+            commentWriteRs = RsData.of(
+                    "400",
+                    bindingResult.getFieldError().getDefaultMessage(),
+                    null
+            );
+
+            return rq.redirectOrBack("/article/%d/detail".formatted(id), commentWriteRs);
         }
+
+        commentWriteRs = commentService.write(
+                article,
+                rq.getMember(),
+                commentForm.getBody()
+        );
+
+        return rq.redirectOrBack("/article/%d/detail".formatted(id), commentWriteRs);
     }
 }
